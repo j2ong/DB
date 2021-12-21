@@ -1,0 +1,81 @@
+check 옵션
+not null  옵션
+null 옵션
+default 옵션
+unique // primary 키로 지정된 경우에 필요없음
+foreign key 옵션
+primary key 옵션
+
+on delete cascade
+on update cascade는 지원하지 않는 명령어
+----------------------------------------
+create table Customer
+(Cunum number(10) not null,
+Acnum varchar2(16),
+Cname varchar2(16) not null,
+primary key(Cunum));
+
+Create table Event
+(Enum varchar2(6) not null,
+cunum number(10),
+primary key(Enum),
+foreign key(cunum) references Customer);
+
+Create table Infor
+(Cname varchar2(16) not null,
+Phone varchar2(14) null,
+Address varchar2(20) null,
+primary key(Cname),
+foreign key(Cname) references Customer);
+ 
+Create table Grade
+(Cunum number(22) not null,
+Acnum varchar2(16),
+Grade varchar2(6) not null,
+check (Grade IN('A','B','C','D')),
+primary key(Cunum,Acnum),
+foreign key(Cunum) references Customer,
+foreign key(Acnum) references Account);
+
+Create table Account
+(Acnum varchar2(10) not null,
+Balance number(10),
+primary key(Acnum));
+
+Create table Card
+(Canum number(10) not null,
+Acnum varchar2(20) not null,
+Ctype varchar2(16) default '신용카드',
+primary key(Canum),
+foreign key(Acnum) references Account);
+
+Create table Save
+(Snum varchar2(6) not null,
+Samount varchar2(16) null,
+Stype varchar2(16) default '자유적금',
+Acnum varchar2(10),
+primary key(Snum),
+foreign key(Acnum) references Account);
+
+Create table Partner
+(Canum number(10) not null,
+Pname varchar2(16) not null,
+Disrate varchar2(6) default '10%',
+primary key(Canum),
+foreign key(Canum) references Card);
+
+Create table Loan
+(Lnum number(10),
+Lamount varchar2(16) default 0,
+Ltype varchar2(16) default '신용대출',
+Acnum varchar2(10),
+primary key(Lnum),
+foreign key(Acnum) references Account);
+
+Create table Branch
+(Lnum number(10),
+Bname varchar2(16),
+Blocation varchar2(16),
+primary key(Lnum),
+foreign key(Lnum) references Loan);
+
